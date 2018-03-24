@@ -1,3 +1,5 @@
+require 'byebug'
+
 class BinaryMinHeap
   attr_reader :store, :prc
 
@@ -31,6 +33,26 @@ class BinaryMinHeap
   end
 
   def self.heapify_down(array, parent_idx, len = array.length, &prc)
+    prc ||= Proc.new { |x, y| x <=> y }
+    curr_index = parent_idx
+    while curr_index < len 
+      child_indices = child_indices(len, curr_index)
+      return array if child_indices.empty? 
+
+      if child_indices.length == 1
+        swap_index = child_indices[0]
+      else 
+        left_idx, right_idx = child_indices
+        swap_index = prc.call(array[left_idx], array[right_idx]) == -1 ? left_idx : right_idx
+      end 
+
+      if array[curr_index] > array[swap_index]
+        array[curr_index], array[swap_index] = array[swap_index], array[curr_index]
+        curr_index = swap_index
+      end
+      return array if parent_idx == curr_index
+    end 
+    array
   end
 
   def self.heapify_up(array, child_idx, len = array.length, &prc)
