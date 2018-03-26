@@ -46,7 +46,7 @@ class BinaryMinHeap
         swap_index = prc.call(array[left_idx], array[right_idx]) == -1 ? left_idx : right_idx
       end 
 
-      if array[curr_index] > array[swap_index]
+      if prc.call(array[curr_index], array[swap_index]) == 1
         array[curr_index], array[swap_index] = array[swap_index], array[curr_index]
         curr_index = swap_index
       end
@@ -56,5 +56,18 @@ class BinaryMinHeap
   end
 
   def self.heapify_up(array, child_idx, len = array.length, &prc)
+    prc ||= Proc.new { |x, y| x <=> y }
+    curr_index = child_idx
+    while curr_index > 0 
+      parent_idx = parent_index(curr_index)
+      if prc.call(array[curr_index], array[parent_idx]) == -1
+        array[curr_index], array[parent_idx] = array[parent_idx], array[curr_index]
+        curr_index = parent_idx
+      else 
+        return array
+      end 
+
+    end 
+    array
   end
 end
