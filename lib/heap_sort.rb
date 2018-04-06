@@ -7,7 +7,7 @@ class Array
     end 
 
     partition = length - 1
-   
+      
     self
   end
 end
